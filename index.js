@@ -1,68 +1,44 @@
-var md5 = require('create-hash/md5')
-module.exports = EVP_BytesToKey
-function EVP_BytesToKey (password, salt, keyLen, ivLen) {
-  if (!Buffer.isBuffer(password)) {
-    password = new Buffer(password, 'binary')
+/* eslint-disable camelcase */
+function EVP_BytesToKey (createHash, salt, data, count, keyLen, ivLen) {
+  if (Buffer.isBuffer(salt) && salt.length !== 8) {
+    throw new RangeError('salt should be Buffer with 8 byte length')
   }
-  if (salt && !Buffer.isBuffer(salt)) {
-    salt = new Buffer(salt, 'binary')
-  }
-  keyLen = keyLen / 8
-  ivLen = ivLen || 0
-  var ki = 0
-  var ii = 0
+
   var key = new Buffer(keyLen)
   var iv = new Buffer(ivLen)
-  var addmd = 0
-  var md_buf
-  var i
-  var bufs = []
-  while (true) {
-    if (addmd++ > 0) {
-      bufs.push(md_buf)
+
+  var mdBuf = new Buffer(0)
+  while (keyLen > 0 || ivLen > 0) {
+    var hash = createHash()
+    hash.update(mdBuf)
+    hash.update(data)
+    if (salt) hash.update(salt)
+
+    for (var i = 1; i < count; ++i) {
+      mdBuf = createHash().update(mdBuf).digest()
     }
-    bufs.push(password)
-    if (salt) {
-      bufs.push(salt)
-    }
-    md_buf = md5(Buffer.concat(bufs))
-    bufs = []
-    i = 0
+
+    mdBuf = hash.digest()
+    var used = 0
+
     if (keyLen > 0) {
-      while (true) {
-        if (keyLen === 0) {
-          break
-        }
-        if (i === md_buf.length) {
-          break
-        }
-        key[ki++] = md_buf[i]
-        keyLen--
-        i++
-      }
+      var keyStart = key.length - keyLen
+      used = Math.min(keyLen, mdBuf.length)
+      mdBuf.copy(key, keyStart, 0, used)
+      keyLen -= used
     }
-    if (ivLen > 0 && i !== md_buf.length) {
-      while (true) {
-        if (ivLen === 0) {
-          break
-        }
-        if (i === md_buf.length) {
-          break
-        }
-        iv[ii++] = md_buf[i]
-        ivLen--
-        i++
-      }
-    }
-    if (keyLen === 0 && ivLen === 0) {
-      break
+
+    if (used < mdBuf.length && ivLen > 0) {
+      var ivStart = iv.length - ivLen
+      var length = Math.min(ivLen, mdBuf.length - used)
+      mdBuf.copy(iv, ivStart, used, used + length)
+      ivLen -= length
     }
   }
-  for (i = 0; i < md_buf.length; i++) {
-    md_buf[i] = 0
-  }
-  return {
-    key: key,
-    iv: iv
-  }
+
+  for (var j = 0; j < mdBuf.length; ++j) mdBuf[j] = 0
+
+  return { key: key, iv: iv }
 }
+
+module.exports = EVP_BytesToKey
