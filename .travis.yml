@@ -1,6 +1,27 @@
+sudo: false
 language: node_js
 node_js:
-  - "0.11"
   - "0.10"
+  - "0.11"
   - "0.12"
-  - "iojs"
+  - "4"
+  - "5"
+  - "6"
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+env:
+  global:
+    - CXX=g++-4.8
+  matrix:
+    - TEST_SUITE=unit
+matrix:
+  include:
+    - node_js: "6"
+      env: TEST_SUITE=lint
+before_script:
+  - npm run test:prepare
+script: npm run-script $TEST_SUITE
