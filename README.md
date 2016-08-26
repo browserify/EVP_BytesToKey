@@ -24,7 +24,7 @@ The super secure [key derivation algorithm from openssl][1]
 * `data` - `Buffer`, data which is used to derive the keying data.
 * `count` - `number`, count is the iteration count to use.
 * `keyLen` - `number`, key length in bytes.
-* `ivLen` - `number`, iv length in bytes
+* `ivLen` - `number`, iv length in bytes.
 
 *Return*: `{ key: Buffer, iv: Buffer }`
 

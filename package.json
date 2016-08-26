@@ -24,15 +24,18 @@
     "url": "https://github.com/crypto-browserify/EVP_BytesToKey.git"
   },
   "scripts": {
-    "coverage": "nyc node test/*.js",
+    "coverage": "nyc tape test/*.js",
     "lint": "standard",
     "test": "npm run lint && npm run unit",
-    "unit": "node test/*.js"
+    "test:prepare": "node-gyp rebuild",
+    "unit": "tape test/*.js"
   },
   "devDependencies": {
-    "create-hash": "^1.1.2",
+    "bindings": "^1.2.1",
+    "nan": "^2.4.0",
     "nyc": "^8.1.0",
     "standard": "^8.0.0",
     "tape": "^4.6.0"
-  }
+  },
+  "gypfile": true
 }
