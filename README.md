@@ -51,9 +51,7 @@ const data = EVP_BytesToKey(
 const cipher = crypto.createCipheriv('aes-256-cbc', data.key, data.iv)
 ```
 
-## LICENSE
-
-MIT
+## LICENSE [MIT](LICENSE)
 
 [1]: https://wiki.openssl.org/index.php/Manual:EVP_BytesToKey(3)
 [2]: https://nodejs.org/api/crypto.html#crypto_class_hash
