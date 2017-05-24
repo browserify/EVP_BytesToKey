@@ -37,5 +37,8 @@
     "standard": "^8.0.0",
     "tape": "^4.6.0"
   },
-  "gypfile": true
+  "gypfile": true,
+  "dependencies": {
+    "safe-buffer": "^5.1.1"
+  }
 }

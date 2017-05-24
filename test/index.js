@@ -6,6 +6,7 @@ try {
   process.exit(1)
 }
 
+var Buffer = require('safe-buffer').Buffer
 var OpenSSL_EVP_BytesToKey = require('bindings')('OpenSSL_EVP_BytesToKey')
 var crypto = require('crypto')
 var test = require('tape')
@@ -43,7 +44,7 @@ for (var i = 0; i < counts.length; ++i) {
 
 test('salt buffer length is 7', function (t) {
   t.throws(function () {
-    EVP_BytesToKey(createHashMD5, new Buffer(7))
+    EVP_BytesToKey(createHashMD5, Buffer.alloc(7))
   }, /^RangeError: salt should be Buffer with 8 byte length$/)
   t.end()
 })

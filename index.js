@@ -1,13 +1,15 @@
+var Buffer = require('safe-buffer').Buffer
+
 /* eslint-disable camelcase */
 function EVP_BytesToKey (createHash, salt, data, count, keyLen, ivLen) {
   if (Buffer.isBuffer(salt) && salt.length !== 8) {
     throw new RangeError('salt should be Buffer with 8 byte length')
   }
 
-  var key = new Buffer(keyLen)
-  var iv = new Buffer(ivLen)
+  var key = Buffer.alloc(keyLen)
+  var iv = Buffer.alloc(ivLen)
+  var mdBuf = Buffer.alloc(0)
 
-  var mdBuf = new Buffer(0)
   while (keyLen > 0 || ivLen > 0) {
     var hash = createHash()
     hash.update(mdBuf)
@@ -36,8 +38,7 @@ function EVP_BytesToKey (createHash, salt, data, count, keyLen, ivLen) {
     }
   }
 
-  for (var j = 0; j < mdBuf.length; ++j) mdBuf[j] = 0
-
+  mdBuf.fill(0)
   return { key: key, iv: iv }
 }
 
