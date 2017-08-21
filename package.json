@@ -1,7 +1,7 @@
 {
   "name": "evp_bytestokey",
   "version": "1.0.0",
-  "description": "the super secure key derivation algorithm from openssl",
+  "description": "The insecure key derivation algorithm from OpenSSL",
   "keywords": [
     "crypto",
     "openssl"
