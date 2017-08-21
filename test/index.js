@@ -19,14 +19,14 @@ for (var i = 0; i < 1000; ++i) {
   var password = crypto.randomBytes(10 + Math.round(Math.random() * 100))
   var salt = crypto.randomBytes(8)
 
-  test('salt is null', function (t) {
+  test('password: ' + password.toString('base64') + ', salt: null', function (t) {
     var result = EVP_BytesToKey(password, null, keyLen, ivLen)
     var expected = OpenSSL_EVP_BytesToKey.md5_key32_iv16(null, password, 1)
     t.same(result, expected)
     t.end()
   })
 
-  test('salt is not null', function (t) {
+  test('password: ' + password.toString('base64') + ', salt: ' + salt.toString('base64'), function (t) {
     var result = EVP_BytesToKey(password, salt, keyLen, ivLen)
     var expected = OpenSSL_EVP_BytesToKey.md5_key32_iv16(salt, password, 1)
     t.same(result, expected)
