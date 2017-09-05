@@ -12,7 +12,7 @@ var crypto = require('crypto')
 var test = require('tape')
 var EVP_BytesToKey = require('../')
 
-var keyLen = 32
+var keyLen = 256
 var ivLen = 16
 
 for (var i = 0; i < 1000; ++i) {
@@ -22,6 +22,7 @@ for (var i = 0; i < 1000; ++i) {
   test('password: ' + password.toString('base64') + ', salt: null', function (t) {
     var result = EVP_BytesToKey(password, null, keyLen, ivLen)
     var expected = OpenSSL_EVP_BytesToKey.md5_key32_iv16(null, password, 1)
+
     t.same(result, expected)
     t.end()
   })
@@ -29,6 +30,15 @@ for (var i = 0; i < 1000; ++i) {
   test('password: ' + password.toString('base64') + ', salt: ' + salt.toString('base64'), function (t) {
     var result = EVP_BytesToKey(password, salt, keyLen, ivLen)
     var expected = OpenSSL_EVP_BytesToKey.md5_key32_iv16(salt, password, 1)
+    t.same(result, expected)
+    t.end()
+  })
+
+  test('password: ' + password.toString('base64') + ', salt: ' + salt.toString('base64') + ', no iv', function (t) {
+    var result = EVP_BytesToKey(password, salt, keyLen, 0)
+    var expected = OpenSSL_EVP_BytesToKey.md5_key32_iv0(salt, password, 1)
+
+    console.log(result, expected)
     t.same(result, expected)
     t.end()
   })
