@@ -35,7 +35,7 @@ const EVP_BytesToKey = require('evp_bytestokey')
 const result = EVP_BytesToKey(
   'my-secret-password',
   null,
-  32,
+  256,
   16
 )
 // =>
