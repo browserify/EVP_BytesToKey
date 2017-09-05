@@ -3,14 +3,21 @@ var MD5 = require('md5.js')
 
 /* eslint-disable camelcase */
 function EVP_BytesToKey (password, salt, keyLen, ivLen) {
-  if (!Buffer.isBuffer(password)) password = Buffer.from(password, 'binary')
+  if (!Buffer.isBuffer(password)) {
+    password = Buffer.from(password, 'binary')
+  }
   if (salt) {
-    if (!Buffer.isBuffer(salt)) salt = Buffer.from(salt, 'binary')
-    if (salt.length !== 8) throw new RangeError('salt should be Buffer with 8 byte length')
+    if (!Buffer.isBuffer(salt)) {
+      salt = Buffer.from(salt, 'binary')
+    }
+    if (salt.length !== 8) {
+      throw new RangeError('salt should be Buffer with 8 byte length')
+    }
   }
 
+  keyLen = keyLen / 8
   var key = Buffer.alloc(keyLen)
-  var iv = Buffer.alloc(ivLen)
+  var iv = Buffer.alloc(ivLen || 0)
   var tmp = Buffer.alloc(0)
 
   while (keyLen > 0 || ivLen > 0) {
