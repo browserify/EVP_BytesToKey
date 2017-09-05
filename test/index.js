@@ -38,7 +38,6 @@ for (var i = 0; i < 1000; ++i) {
     var result = EVP_BytesToKey(password, salt, keyLen, 0)
     var expected = OpenSSL_EVP_BytesToKey.md5_key32_iv0(salt, password, 1)
 
-    console.log(result, expected)
     t.same(result, expected)
     t.end()
   })
