@@ -39,8 +39,8 @@ const result = EVP_BytesToKey(
   16
 )
 // =>
-// { key: <Buffer e3 4f 96 f3 86 24 82 7c c2 5d ff 23 18 6f 77 72 54 45 7f 49 d4 be 4b dd 4f 6e 1b cc 92 a4 27 33>,
-//   iv: <Buffer 85 71 9a bf ae f4 1e 74 dd 46 b6 13 79 56 f5 5b> }
+// { key: <Buffer a2 d9 67 9c 7f ff 3e 9c f4 30 0a 2c c3 fb ad 79 59 ed ae e8 a4 3c 1a 9d 71 68 ea c4 68 08 a5 7a>,
+//  iv: <Buffer bf 5e 15 5a 28 94 3b 10 46 31 24 84 60 9c 5f 3c> }
 
 const cipher = crypto.createCipheriv('aes-256-cbc', result.key, result.iv)
 ```
